@@ -1,1 +1,27 @@
+from pypdf import PdfReader
+import os
+import sys
 
+path = input("Enter path to file: ")
+filename = os.path.join(path, input("Enter the PDF file name : "))
+if not os.path.isfile(filename):
+    print("File does not exist.")
+    sys.exit(1)
+reader = PdfReader(filename)
+print(f"Number of pages: {len(reader.pages)}")
+full_text = ""
+try:
+    print("Reading PDF file..")
+    for page in reader.pages:
+        text = page.extract_text()
+        if text:
+            full_text += text
+    print("Done reading PDF file.")
+    print(f"Total characters : {len(full_text)}")
+
+
+    word = input("Enter the word to search : ").lower()
+    count = full_text.lower().count(word)
+    print(f"The word '{word}' appears {count} times in the PDF file.")
+except Exception as e:
+    print(f"An error occurred: {e}")
